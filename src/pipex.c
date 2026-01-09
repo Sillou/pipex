@@ -6,7 +6,7 @@
 /*   By: alubrano <alubrano@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/08 21:33:53 by alubrano          #+#    #+#             */
-/*   Updated: 2026/01/09 15:28:44 by alubrano         ###   ########.fr       */
+/*   Updated: 2026/01/09 17:38:17 by alubrano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,53 +16,34 @@ int	ft_open(char *argv, int z)
 {
 	int	rest;
 
-	if (z == 0)
-		rest = open(argv, O_RDONLY);
-	if (z == 1)
+	if (z == 0) // parent
+		rest = open(argv, O_WRONLY|O_CREAT|O_TRUNC, 0644);
+	if (z == 1) // child
 		rest = open(argv, O_WRONLY);
+	if (!rest)
+		perror("open")
 	return(rest);
-}
-
-void	ft_free_cmd(char **t_cmd)
-{
-	int	x;
-
-	x = 0;
-	while (t_cmd[x])
-		free(t_cmd[x]);
-	free(t_cmd);
-}
-
-void	ft_exec(char *argv, char **envp)
-{
-	char	**t_cmd;
-	char	*path;
-
-	path = ft_get_path(envp);
-	t_cmd = ft_split(argv, ' ');
-	if (execv(path, t_cmd) == -1)
-		ft_putendl_fd("CMD not found", 2);
-	ft_free_cmd(t_cmd);
-
-}
-
-void	ft_parent(int *fds, char **argv, char **envp)
-{
-	int	fd;
-
-	fd = ft_open(argv[1], 1);
-	dup2(fd, 0);
-	dup2(fds[1], 1);
-	close(fds[1]);
-	ft_exec(argv[2], envp);
 }
 
 void	ft_child(int *fds, char **argv, char **envp)
 {
-	int	fd;
+	int	fd_in;
 
-	fd = ft_open(argv[4], 0);
-	dup2(fd, 0);
+	fd_in = ft_open(argv[4], 1);
+	dup2(fd_in, 0);
+	dup2(fds[1], 0);
+	close(fd_in);
+	close(fds[0]);
+	close(fds[1]);
+	ft_exec(argv[2], envp);
+}
+
+void	ft_parent(int *fds, char **argv, char **envp)
+{
+	int	fd_in;
+
+	fd_in = ft_open(argv[2] 0);
+	dup2(fd_in, 0);
 	dup2(fds[0], 0);
 	close(fds[1]);
 	ft_exec(argv[3], envp);
@@ -80,7 +61,9 @@ int	main(int argc, char **argv, char **envp)
 		pid = fork();
 		if (pid == -1)
 			perror("FORK");
-		ft_child(fds, argv, envp);
+		if (pid == 0)
+			ft_child(fds, argv, envp);
+		waitpid(pid, NULL, 0);
 		ft_parent(fds, argv, envp);
 	}
 	else

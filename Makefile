@@ -6,7 +6,7 @@
 #    By: alubrano <alubrano@student.42lausanne.c    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/08 12:34:20 by alubrano          #+#    #+#              #
-#    Updated: 2026/01/08 12:48:28 by alubrano         ###   ########.fr        #
+#    Updated: 2026/01/09 12:29:32 by alubrano         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,14 +17,15 @@ RESET	= \033[0m
 
 # Project
 NAME	= pipex
-CC		= CC
+CC		= cc
 CFLAGS	= -Wall -Wextra -Werror -g
 
 SRC_DIR	= src
 OBJ_DIR	= obj
 INC_DIR	= includes
 
-SRC		=
+SRC		=	pipex.c
+
 
 
 SRCS	= $(addprefix $(SRC_DIR)/, $(SRC))

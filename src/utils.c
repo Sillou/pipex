@@ -17,8 +17,10 @@ void	ft_free_cmd(char **t_cmd)
 	int	x;
 
 	x = 0;
+	if (!t_cmd)
+		return ;
 	while (t_cmd[x])
-		free(t_cmd[x]);
+		free(t_cmd[x++]);
 	free(t_cmd);
 }
 
@@ -33,4 +35,12 @@ void	ft_exec(char *argv, char **envp)
 		ft_putendl_fd("CMD not found", 2);
 	ft_free_cmd(t_cmd);
 
+}
+
+void	ft_error(char *s, t_pipex pipex)
+{
+	ft_putstr_fd(s, 2);
+	if (pipex)
+		ft_clean_pipex(pipex);
+	exit();
 }

@@ -20,6 +20,20 @@
 #include <fcntl.h> // open
 #include <sys/wait.h> // for waipid
 
+typedef struct s_pipex
+{
+	int		file_in;
+	int		file_out;
+	int 	prev_in;
+	int		fds[2];
+	pid_t	*pids;
+	int		n_cmd;
+	int		i;
+	char	**envp;
+	char	**paths;
+}	t_pipex;
+
+
 /*----------------pipex--------------*/
 
 int	main(int agc, char **argv, char **envp);

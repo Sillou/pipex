@@ -12,64 +12,70 @@
 
 #include "pipex.h"
 
-int	ft_open(char *argv, int z)
+int	ft_open(char *argv, int z, t_pipex	*pipex)
 {
 	int	rest;
 
-	if (z == 0) // parent
+	rest = -1;
+	if (z == 0) 
 		rest = open(argv, O_WRONLY|O_CREAT|O_TRUNC, 0644);
-	if (z == 1) // child
-		rest = open(argv, O_WRONLY);
-	if (!rest)
-		perror("open")
+	else if (z == 1)
+		rest = open(argv, O_RDONLY);
+	else 
+		ft_error ("Bad z at open", pipex);
+	if (rest == -1)
+	{
+		perror(argv);
+		ft_error("Open failed", pipex);
+	}
 	return(rest);
 }
 
-void	ft_child(int *fds, char **argv, char **envp)
+t_pipex	*ft_ini_pipex(int argc, char **argv, char **envp)
 {
-	int	fd_in;
-
-	fd_in = ft_open(argv[4], 1);
-	dup2(fd_in, 0);
-	dup2(fds[1], 0);
-	close(fd_in);
-	close(fds[0]);
-	close(fds[1]);
-	ft_exec(argv[2], envp);
-}
-
-void	ft_parent(int *fds, char **argv, char **envp)
-{
-	int	fd_in;
-
-	fd_in = ft_open(argv[2] 0);
-	dup2(fd_in, 0);
-	dup2(fds[0], 0);
-	close(fds[1]);
-	ft_exec(argv[3], envp);
+	t_pipex *pipex;
+	
+	pipex = ft_calloc(1, sizeof(t_pipex));
+	if (!pipex)
+		ft_error("Calloc failled", pipex); // attention au free pipex avec pipex NULL;
+	pipex->pids = malloc(sizeof(pid_t) * pipex->n_cmd);
+	if (!pipex->pids)
+		ft_error("Pipex pids error", pipex);
+	pipex->paths = ft_get_path(envp);
+	if (!pipex->paths)
+		ft_error("Pipex paths erro", pipex);
+	pipex->n_cmd = argc - 3;
+	pipex->i = 2;
+	pipex->file_in = -1;
+	pipex->file_out = -1;
+	pipex->prev_in = -1;
+	pipex->fds[0] = -1;
+	pipex->fds[1] = -1;
+	pipex->file_in = ft_open(argv[1], 1, pipex);
+	pipex->file_out = ft_open(argv[argc - 1], 0, pipex);
+	pipex->prev_in = pipex->file_in;
+	pipex->envp = envp;
+	return (pipex);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
-	int	fds[2];
-	pid_t	pid;
+	t_pipex	*pipex;
+	int		k;
 
-	if (argc == 5)
+	k = 0;
+	if (argc >= 5)
 	{
-		if (pipe(fds) == -1)
-			perror("PIPE");
-		pid = fork();
-		if (pid == -1)
-			perror("FORK");
-		if (pid == 0)
-			ft_child(fds, argv, envp);
-		waitpid(pid, NULL, 0);
-		ft_parent(fds, argv, envp);
+		pipex = ft_ini_pipex(argc, argv, envp);
+		while (pipex->i < argc - 2)
+			pipex->pids[k++] = ft_cmd(pipex, argv[pipex->i++]);
+		pipex->pids[k] = ft_cmd_last(pipex, argv[argc - 2]);
+		while (k >= 0)
+			waitpid(pipex->pids[k--], NULL, 0);
+		ft_clean_pipex(pipex);
+		return (0);
 	}
-	else
-	{
-		ft_printf("Please enter right args\n");
-		ft_printf("EX : ./pipex file1 cmd1 cmd2 file2\n");
-	}
-	return (0);
+	else 
+		ft_printf("ERRO EX : ./pipex file1 cmd1 cmd2 file2");
+	return (1);
 }

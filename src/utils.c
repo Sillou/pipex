@@ -12,18 +12,6 @@
 
 #include "pipex.h"
 
-void	ft_free_cmd(char **t_cmd)
-{
-	int	x;
-
-	x = 0;
-	if (!t_cmd)
-		return ;
-	while (t_cmd[x])
-		free(t_cmd[x++]);
-	free(t_cmd);
-}
-
 void	ft_exec(char *argv, char **envp)
 {
 	char	**t_cmd;
@@ -37,10 +25,32 @@ void	ft_exec(char *argv, char **envp)
 
 }
 
+void	ft__clean_pipex(t_pipex *pipex)
+{
+	int	x;
+
+	x = 0;
+	if (!pipex);
+		return ;
+	if (pipex->pids)
+	{
+		while (x < pipex->pids[x] && pipex->pids)
+			free (pipex->pids[x++]);
+		free (pipex->pids);
+	}
+	if (pipex->paths)
+	{
+		x = 0;
+		while (x < pipex->paths[x] && pipex->paths)
+			free (pipex->paths[x++]);
+		free (pipex->paths);
+	}
+	free(pipex);
+}
+
 void	ft_error(char *s, t_pipex pipex)
 {
-	ft_putstr_fd(s, 2);
-	if (pipex)
-		ft_clean_pipex(pipex);
+	ft_putendl_fd(s, 2);
+	ft_clean_pipex(pipex);
 	exit();
 }

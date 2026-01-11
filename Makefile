@@ -24,9 +24,8 @@ SRC_DIR	= src
 OBJ_DIR	= obj
 INC_DIR	= includes
 
-SRC		=	pipex.c
-
-
+SRC		=	pipex.c \
+			utils.c
 
 SRCS	= $(addprefix $(SRC_DIR)/, $(SRC))
 OBJS	= $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))

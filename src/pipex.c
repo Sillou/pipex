@@ -12,6 +12,28 @@
 
 #include "pipex.h"
 
+void	ft_cmd(t_pipex *pipex)
+{
+	if (pipe(pipex->fds) == -1)
+		perror("Pipe");
+	pipex->pids = fork();
+	if (pipex->pids == -1)
+		perror("Fork");
+	if (pipex->pids == 0)
+	{
+		close(fd[0]);
+		dup2(fds[1], 0);
+		
+	}
+
+
+}
+
+void	ft_cmd_last(t_pipex *pipex)
+{
+
+}
+
 int	ft_open(char *argv, int z, t_pipex	*pipex)
 {
 	int	rest;
@@ -21,8 +43,6 @@ int	ft_open(char *argv, int z, t_pipex	*pipex)
 		rest = open(argv, O_WRONLY|O_CREAT|O_TRUNC, 0644);
 	else if (z == 1)
 		rest = open(argv, O_RDONLY);
-	else 
-		ft_error ("Bad z at open", pipex);
 	if (rest == -1)
 	{
 		perror(argv);
@@ -37,13 +57,13 @@ t_pipex	*ft_ini_pipex(int argc, char **argv, char **envp)
 	
 	pipex = ft_calloc(1, sizeof(t_pipex));
 	if (!pipex)
-		ft_error("Calloc failled", pipex); // attention au free pipex avec pipex NULL;
+		ft_error("Calloc failled", pipex);
 	pipex->pids = malloc(sizeof(pid_t) * pipex->n_cmd);
 	if (!pipex->pids)
-		ft_error("Pipex pids error", pipex);
+		ft_error("Pipex pids error", pipex); 
 	pipex->paths = ft_get_path(envp);
 	if (!pipex->paths)
-		ft_error("Pipex paths erro", pipex);
+		ft_error("Pipex paths erro", pipex); 
 	pipex->n_cmd = argc - 3;
 	pipex->i = 2;
 	pipex->file_in = -1;
@@ -72,6 +92,8 @@ int	main(int argc, char **argv, char **envp)
 		pipex->pids[k] = ft_cmd_last(pipex, argv[argc - 2]);
 		while (k >= 0)
 			waitpid(pipex->pids[k--], NULL, 0);
+		close(fds[1]);
+		close(fds[])
 		ft_clean_pipex(pipex);
 		return (0);
 	}

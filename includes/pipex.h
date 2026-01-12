@@ -6,7 +6,7 @@
 /*   By: alubrano <alubrano@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/08 12:34:33 by alubrano          #+#    #+#             */
-/*   Updated: 2026/01/09 17:15:02 by alubrano         ###   ########.fr       */
+/*   Updated: 2026/01/12 09:16:46 by alubrano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ typedef struct s_pipex
 	int		file_in;
 	int		file_out;
 	int 	prev_in;
-	int		fds[2];
 	pid_t	*pids;
 	int		n_cmd;
 	int		i;

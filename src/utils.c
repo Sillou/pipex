@@ -25,32 +25,34 @@ void	ft_exec(char *argv, char **envp)
 
 }
 
-void	ft__clean_pipex(t_pipex *pipex)
+void	ft_clean_pipex(t_pipex *pipex)
 {
 	int	x;
 
 	x = 0;
-	if (!pipex);
+	if (!pipex)
 		return ;
 	if (pipex->pids)
-	{
-		while (x < pipex->pids[x] && pipex->pids)
-			free (pipex->pids[x++]);
 		free (pipex->pids);
-	}
 	if (pipex->paths)
 	{
 		x = 0;
-		while (x < pipex->paths[x] && pipex->paths)
+		while (pipex->paths[x] != NULL)
 			free (pipex->paths[x++]);
 		free (pipex->paths);
 	}
+	if (pipex->file_in >= 0)
+		close(pipex->file_in);
+	if (pipex->file_out >= 0)
+		close(pipex->file_out);
+	if (pipex->prev_in >= 0)
+		close(pipex->prev_in);
 	free(pipex);
 }
 
-void	ft_error(char *s, t_pipex pipex)
+void	ft_error(char *s, t_pipex *pipex)
 {
 	ft_putendl_fd(s, 2);
 	ft_clean_pipex(pipex);
-	exit();
+	exit(1);
 }

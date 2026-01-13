@@ -50,9 +50,9 @@ pid_t	ft_cmd_last(t_pipex *pipex, char *argv)
 	if (pid == 0)
 	{
 		dup2(pipex->prev_in, 0);
-		dup2( pipex->file_out, 1);
+		dup2(pipex->file_out, 1);
 		close(pipex->prev_in);
-		close(pipex->prev_out);
+		close(pipex->file_out);
 		ft_exec(pipex, argv);
 	}
 	else
@@ -77,7 +77,7 @@ int	ft_open(char *argv, int z, t_pipex	*pipex)
 		perror(argv);
 		ft_error("Open failed", pipex);
 	}
-	return(rest);
+	return (rest);
 }
 
 t_pipex	*ft_ini_pipex(int argc, char **argv, char **envp)
@@ -87,13 +87,13 @@ t_pipex	*ft_ini_pipex(int argc, char **argv, char **envp)
 	pipex = ft_calloc(1, sizeof(t_pipex));
 	if (!pipex)
 		ft_error("Calloc failled", pipex);
+	pipex->n_cmd = argc - 3;
 	pipex->pids = malloc(sizeof(pid_t) * pipex->n_cmd);
 	if (!pipex->pids)
 		ft_error("Pipex pids error", pipex); 
 	pipex->paths = ft_get_path(envp);
 	if (!pipex->paths)
 		ft_error("Pipex paths erro", pipex); 
-	pipex->n_cmd = argc - 3;
 	pipex->i = 2;
 	pipex->file_in = -1;
 	pipex->file_out = -1;
@@ -114,9 +114,10 @@ int	main(int argc, char **argv, char **envp)
 	if (argc >= 5)
 	{
 		pipex = ft_ini_pipex(argc, argv, envp);
-		while (pipex->i < argc - 2)
+		while (pipex->i < argc - 3)
 			pipex->pids[k++] = ft_cmd(pipex, argv[pipex->i++]);
 		pipex->pids[k] = ft_cmd_last(pipex, argv[argc - 2]);
+		close(pipex->file_in);
 		while (k >= 0)
 			waitpid(pipex->pids[k--], NULL, 0);
 		ft_clean_pipex(pipex);

@@ -12,12 +12,34 @@
 
 #include "pipex.h"
 
-void	ft_exec(char *argv, char **envp)
+void	ft_get_path(t_pipex *pipex, char *argv)
+{
+	int		i;
+	char	*line;
+
+	i = 0;
+	while (pipex->envp[i])
+	{
+		if (ft_strnstr(pipex->envp[i], "PATH=", 5) == pipex->envp[i])
+		{
+			line = pipex->envp[i];
+			break;
+		}
+		i++;
+	}
+	if (!line)
+		ft_error("Path not found", pipex);
+	pipex->paths = ft_split(line, ":");
+	if (!pipex->paths)
+		ft_error("Path split Error", pipex);
+}
+
+void	ft_exec(t_pipex *pipex, char *argv)
 {
 	char	**t_cmd;
 	char	*path;
 
-	path = ft_get_path(envp);
+	path = ft_get_path(pipex, argv);
 	t_cmd = ft_split(argv, ' ');
 	if (execv(path, t_cmd) == -1)
 		ft_putendl_fd("CMD not found", 2);

@@ -6,7 +6,7 @@
 /*   By: alubrano <alubrano@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/08 21:33:53 by alubrano          #+#    #+#             */
-/*   Updated: 2026/01/09 17:38:17 by alubrano         ###   ########.fr       */
+/*   Updated: 2026/01/14 15:45:49 by alubrano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	ft_open(char *argv, int z, t_pipex	*pipex)
 	int	rest;
 
 	rest = -1;
-	if (z == 0) 
+	if (z == 0)
 		rest = open(argv, O_WRONLY|O_CREAT|O_TRUNC, 0644);
 	else if (z == 1)
 		rest = open(argv, O_RDONLY);
@@ -83,17 +83,17 @@ int	ft_open(char *argv, int z, t_pipex	*pipex)
 t_pipex	*ft_ini_pipex(int argc, char **argv, char **envp)
 {
 	t_pipex *pipex;
-	
+
 	pipex = ft_calloc(1, sizeof(t_pipex));
 	if (!pipex)
 		ft_error("Calloc failled", pipex);
 	pipex->n_cmd = argc - 3;
 	pipex->pids = malloc(sizeof(pid_t) * pipex->n_cmd);
 	if (!pipex->pids)
-		ft_error("Pipex pids error", pipex); 
-	pipex->paths = ft_get_path(envp);
+		ft_error("Pipex pids error", pipex);
+	pipex->envp = envp;
 	if (!pipex->paths)
-		ft_error("Pipex paths erro", pipex); 
+		ft_error("Pipex paths erro", pipex);
 	pipex->i = 2;
 	pipex->file_in = -1;
 	pipex->file_out = -1;
@@ -101,7 +101,7 @@ t_pipex	*ft_ini_pipex(int argc, char **argv, char **envp)
 	pipex->file_in = ft_open(argv[1], 1, pipex);
 	pipex->file_out = ft_open(argv[argc - 1], 0, pipex);
 	pipex->prev_in = pipex->file_in;
-	pipex->envp = envp;
+	ft_get_path(pipex);
 	return (pipex);
 }
 
@@ -123,7 +123,7 @@ int	main(int argc, char **argv, char **envp)
 		ft_clean_pipex(pipex);
 		return (0);
 	}
-	else 
+	else
 		ft_printf("ERRO EX : ./pipex file1 cmd1 cmd2 file2");
 	return (1);
 }

@@ -6,19 +6,31 @@
 /*   By: alubrano <alubrano@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/09 17:37:28 by alubrano          #+#    #+#             */
-/*   Updated: 2026/01/09 17:38:09 by alubrano         ###   ########.fr       */
+/*   Updated: 2026/01/14 15:33:40 by alubrano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	ft_get_path(t_pipex *pipex, char *argv)
+void	ft_exec(t_pipex *pipex, char *argv)
+{
+	char	**t_cmd;
+
+	t_cmd = ft_split(argv, ' ');
+	if (!t_cmd)
+		ft_error("Path split Error", pipex);
+	if(execv(*pipex->paths, t_cmd) == -1)
+		ft_putendl_fd("CMD not found", 2);
+	ft_free_cmd(t_cmd);
+}
+
+void	ft_get_path(t_pipex *pipex)
 {
 	int		i;
-	char	*line;
+	char	*line = NULL;
 
 	i = 0;
-	while (pipex->envp[i])
+	while (pipex->envp[i] != NULL)
 	{
 		if (ft_strnstr(pipex->envp[i], "PATH=", 5) == pipex->envp[i])
 		{
@@ -29,22 +41,19 @@ void	ft_get_path(t_pipex *pipex, char *argv)
 	}
 	if (!line)
 		ft_error("Path not found", pipex);
-	pipex->paths = ft_split(line, ":");
+	pipex->paths = ft_split(line, ':');
 	if (!pipex->paths)
 		ft_error("Path split Error", pipex);
 }
 
-void	ft_exec(t_pipex *pipex, char *argv)
+void	ft_free_cmd(char ** t_cmd)
 {
-	char	**t_cmd;
-	char	*path;
+	int	x;
 
-	path = ft_get_path(pipex, argv);
-	t_cmd = ft_split(argv, ' ');
-	if (execv(path, t_cmd) == -1)
-		ft_putendl_fd("CMD not found", 2);
-	ft_free_cmd(t_cmd);
-
+	x = 0;
+	while (t_cmd[x])
+		free(t_cmd[x++]);
+	free(t_cmd);
 }
 
 void	ft_clean_pipex(t_pipex *pipex)

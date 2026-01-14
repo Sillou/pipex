@@ -1,0 +1,141 @@
+# ========================================
+# TESTS PIPEX - Liste de commandes
+# ========================================
+
+# Préparer les fichiers de test
+echo -e "Bonjour le monde\nCeci est un test\n42 lausanne\nprogrammation en C\ntest de pipex" > infile.txt
+seq 1 100 > numbers.txt
+
+# ========================================
+# TESTS BASIQUES
+# ========================================
+
+# Test 1: Simple pipe
+./pipex infile.txt "cat" "wc -l" out1.txt
+< infile.txt cat | wc -l
+
+# Test 2: grep + wc
+./pipex infile.txt "grep test" "wc -l" out2.txt
+< infile.txt grep test | wc -l
+
+# Test 3: cat + grep
+./pipex infile.txt "cat" "grep test" out3.txt
+< infile.txt cat | grep test
+
+# Test 4: ls + grep
+./pipex infile.txt "ls -la" "grep pipex" out4.txt
+< infile.txt ls -la | grep pipex
+
+# Test 5: head + tail
+./pipex numbers.txt "head -20" "tail -5" out5.txt
+< numbers.txt head -20 | tail -5
+
+# ========================================
+# TESTS AVEC 3+ COMMANDES
+# ========================================
+
+# Test 6: cat + grep + wc
+./pipex infile.txt "cat" "grep test" "wc -w" out6.txt
+< infile.txt cat | grep test | wc -w
+
+# Test 7: cat + cat + cat + wc
+./pipex infile.txt "cat" "cat" "cat" "wc -l" out7.txt
+< infile.txt cat | cat | cat | wc -l
+
+# Test 8: head + grep + wc
+./pipex numbers.txt "head -50" "grep 2" "wc -l" out8.txt
+< numbers.txt head -50 | grep 2 | wc -l
+
+# ========================================
+# TESTS DE TRANSFORMATION
+# ========================================
+
+# Test 9: tr majuscules
+./pipex infile.txt "head -2" "tr 'a-z' 'A-Z'" out9.txt
+< infile.txt head -2 | tr 'a-z' 'A-Z'
+
+# Test 10: rev (inversion)
+./pipex infile.txt "head -1" "rev" out10.txt
+< infile.txt head -1 | rev
+
+# Test 11: sort
+./pipex infile.txt "cat" "sort" out11.txt
+< infile.txt cat | sort
+
+# Test 12: sort + uniq
+echo -e "aaa\nbbb\naaa\nccc\nbbb" > test_dup.txt
+./pipex test_dup.txt "sort" "uniq" out12.txt
+< test_dup.txt sort | uniq
+
+# ========================================
+# TESTS AVEC ARGUMENTS
+# ========================================
+
+# Test 13: grep avec pattern
+./pipex infile.txt "grep -i TEST" "wc -l" out13.txt
+< infile.txt grep -i TEST | wc -l
+
+# Test 14: head avec nombre
+./pipex numbers.txt "head -10" "wc -l" out14.txt
+< numbers.txt head -10 | wc -l
+
+# Test 15: tail avec nombre
+./pipex numbers.txt "tail -15" "head -5" out15.txt
+< numbers.txt tail -15 | head -5
+
+# ========================================
+# TESTS CAS LIMITES VALIDES
+# ========================================
+
+# Test 16: Fichier vide
+touch empty.txt
+./pipex empty.txt "cat" "wc -l" out16.txt
+< empty.txt cat | wc -l
+
+# Test 17: /dev/null
+./pipex /dev/null "cat" "wc -l" out17.txt
+< /dev/null cat | wc -l
+
+# Test 18: Gros fichier
+dd if=/dev/zero bs=1M count=5 2>/dev/null | tr '\0' 'A' > bigfile.txt
+./pipex bigfile.txt "head -1" "wc -c" out18.txt
+< bigfile.txt head -1 | wc -c
+
+# Test 19: Beaucoup de pipes
+./pipex infile.txt "cat" "cat" "cat" "cat" "cat" "wc -l" out19.txt
+< infile.txt cat | cat | cat | cat | cat | wc -l
+
+# ========================================
+# TESTS D'ERREURS (doivent échouer proprement)
+# ========================================
+
+# Test 20: Fichier inexistant
+./pipex nofile.txt "cat" "wc" out20.txt
+echo "Exit code: $?"
+
+# Test 21: Commande invalide
+./pipex infile.txt "commandeinexistante" "cat" out21.txt
+echo "Exit code: $?"
+
+# Test 22: Deux commandes invalides
+./pipex infile.txt "cmd1invalid" "cmd2invalid" out22.txt
+echo "Exit code: $?"
+
+# Test 23: Arguments insuffisants
+./pipex infile.txt "cat"
+echo "Exit code: $?"
+
+# Test 24: Aucun argument
+./pipex
+echo "Exit code: $?"
+
+# Test 25: Fichier output sans permissions
+touch noperm.txt && chmod 000 noperm.txt
+./pipex infile.txt "cat" "wc" noperm.txt
+chmod 644 noperm.txt && rm noperm.txt
+
+# Test 26: Fichier input sans permissions
+touch noperm_in.txt && chmod 000 noperm_in.txt
+./pipex noperm_in.txt "cat" "wc" out26.txt
+chmod 644 noperm_in.txt && rm noperm_in.txt
+

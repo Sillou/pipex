@@ -6,7 +6,7 @@
 /*   By: alubrano <alubrano@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/09 17:37:28 by alubrano          #+#    #+#             */
-/*   Updated: 2026/01/14 15:33:40 by alubrano         ###   ########.fr       */
+/*   Updated: 2026/01/14 16:51:05 by alubrano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	ft_exec(t_pipex *pipex, char *argv)
 	t_cmd = ft_split(argv, ' ');
 	if (!t_cmd)
 		ft_error("Path split Error", pipex);
-	if(execv(*pipex->paths, t_cmd) == -1)
+	if (execv(*pipex->paths, t_cmd) == -1)
 		ft_putendl_fd("CMD not found", 2);
 	ft_free_cmd(t_cmd);
 }
@@ -27,15 +27,16 @@ void	ft_exec(t_pipex *pipex, char *argv)
 void	ft_get_path(t_pipex *pipex)
 {
 	int		i;
-	char	*line = NULL;
+	char	*line;
 
+	line = NULL;
 	i = 0;
 	while (pipex->envp[i] != NULL)
 	{
 		if (ft_strnstr(pipex->envp[i], "PATH=", 5) == pipex->envp[i])
 		{
 			line = pipex->envp[i];
-			break;
+			break ;
 		}
 		i++;
 	}
@@ -46,7 +47,7 @@ void	ft_get_path(t_pipex *pipex)
 		ft_error("Path split Error", pipex);
 }
 
-void	ft_free_cmd(char ** t_cmd)
+void	ft_free_cmd(char **t_cmd)
 {
 	int	x;
 

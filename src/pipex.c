@@ -6,7 +6,7 @@
 /*   By: alubrano <alubrano@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/08 21:33:53 by alubrano          #+#    #+#             */
-/*   Updated: 2026/01/14 15:45:49 by alubrano         ###   ########.fr       */
+/*   Updated: 2026/01/14 16:51:08 by alubrano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	ft_open(char *argv, int z, t_pipex	*pipex)
 
 	rest = -1;
 	if (z == 0)
-		rest = open(argv, O_WRONLY|O_CREAT|O_TRUNC, 0644);
+		rest = open(argv, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	else if (z == 1)
 		rest = open(argv, O_RDONLY);
 	if (rest == -1)
@@ -82,7 +82,7 @@ int	ft_open(char *argv, int z, t_pipex	*pipex)
 
 t_pipex	*ft_ini_pipex(int argc, char **argv, char **envp)
 {
-	t_pipex *pipex;
+	t_pipex	*pipex;
 
 	pipex = ft_calloc(1, sizeof(t_pipex));
 	if (!pipex)

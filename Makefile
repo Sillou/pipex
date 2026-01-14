@@ -6,7 +6,7 @@
 #    By: alubrano <alubrano@student.42lausanne.c    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/08 12:34:20 by alubrano          #+#    #+#              #
-#    Updated: 2026/01/14 16:52:57 by alubrano         ###   ########.fr        #
+#    Updated: 2026/01/14 18:54:44 by alubrano         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,7 +48,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(NAME): $(LIBFT) $(OBJS)
-	@$(CC) $(CFLAGS) $(OBJS) -L$(LIBFT_DIR) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME)
 	@echo "$(GREEN)✓ Build OK: $(NAME)$(RESET)"
 
 clean:

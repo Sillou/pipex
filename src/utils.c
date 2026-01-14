@@ -6,7 +6,7 @@
 /*   By: alubrano <alubrano@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/09 17:37:28 by alubrano          #+#    #+#             */
-/*   Updated: 2026/01/14 16:51:05 by alubrano         ###   ########.fr       */
+/*   Updated: 2026/01/14 18:59:04 by alubrano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,30 @@
 void	ft_exec(t_pipex *pipex, char *argv)
 {
 	char	**t_cmd;
+	char	*cmd_path;
+	char	*temp;
+	int		i;
 
 	t_cmd = ft_split(argv, ' ');
 	if (!t_cmd)
 		ft_error("Path split Error", pipex);
-	if (execv(*pipex->paths, t_cmd) == -1)
-		ft_putendl_fd("CMD not found", 2);
+	i = 0;
+	while (pipex->paths[i])
+	{
+		temp = ft_strjoin(pipex->paths[i], "/");
+		cmd_path = ft_strjoin(temp, t_cmd[0]);
+		free(temp);
+		if (access(cmd_path, X_OK) == 0)
+		{
+			execve(cmd_path, t_cmd, pipex->envp);
+			free(cmd_path);
+		}
+		free(cmd_path);
+		i++;
+	}
+	ft_putendl_fd("CMD not found", 2);
 	ft_free_cmd(t_cmd);
+	exit(127);
 }
 
 void	ft_get_path(t_pipex *pipex)
@@ -35,7 +52,7 @@ void	ft_get_path(t_pipex *pipex)
 	{
 		if (ft_strnstr(pipex->envp[i], "PATH=", 5) == pipex->envp[i])
 		{
-			line = pipex->envp[i];
+			line = pipex->envp[i] + 5;
 			break ;
 		}
 		i++;

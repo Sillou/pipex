@@ -1,0 +1,7 @@
+coucou
+cat
+42 
+tu peux pas test
+essaie valgrind
+loupé
+test de pipex

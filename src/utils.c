@@ -6,7 +6,7 @@
 /*   By: alubrano <alubrano@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/09 17:37:28 by alubrano          #+#    #+#             */
-/*   Updated: 2026/01/14 18:59:04 by alubrano         ###   ########.fr       */
+/*   Updated: 2026/01/14 20:52:04 by alubrano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	ft_exec(t_pipex *pipex, char *argv)
 	int		i;
 
 	t_cmd = ft_split(argv, ' ');
-	if (!t_cmd)
+	if (!t_cmd || !t_cmd[0])
 		ft_error("Path split Error", pipex);
 	i = 0;
 	while (pipex->paths[i])
@@ -31,7 +31,6 @@ void	ft_exec(t_pipex *pipex, char *argv)
 		if (access(cmd_path, X_OK) == 0)
 		{
 			execve(cmd_path, t_cmd, pipex->envp);
-			free(cmd_path);
 		}
 		free(cmd_path);
 		i++;

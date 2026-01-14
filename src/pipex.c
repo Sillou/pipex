@@ -6,7 +6,7 @@
 /*   By: alubrano <alubrano@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/08 21:33:53 by alubrano          #+#    #+#             */
-/*   Updated: 2026/01/14 19:00:27 by alubrano         ###   ########.fr       */
+/*   Updated: 2026/01/14 22:53:27 by alubrano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,11 @@ int	ft_open(char *argv, int z, t_pipex	*pipex)
 
 	rest = -1;
 	if (z == 0)
-		rest = open(argv, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		rest = open(argv, O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	else if (z == 1)
 		rest = open(argv, O_RDONLY);
+	else if (z == 2)
+		rest = open(argv, O_WRONLY | O_CREAT | O_APPEND, 0777);
 	if (rest == -1)
 	{
 		perror(argv);
@@ -114,7 +116,13 @@ int	main(int argc, char **argv, char **envp)
 	if (argc >= 5)
 	{
 		pipex = ft_ini_pipex(argc, argv, envp);
-		while (pipex->i < argc - 2)
+		if (ft_strncmp(argv[1], "here_doc", 8) == 0)
+		{
+			pipex->i = 3,
+			pipex->file_out = ft_open(argv[argc - 1], 2);
+			ft_here_doc(argv[2]
+		}
+		while (pipex->i < argc - pipex->i)
 			pipex->pids[k++] = ft_cmd(pipex, argv[pipex->i++]);
 		pipex->pids[k] = ft_cmd_last(pipex, argv[argc - 2]);
 		close(pipex->file_in);

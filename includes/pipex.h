@@ -6,7 +6,7 @@
 /*   By: alubrano <alubrano@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/08 12:34:33 by alubrano          #+#    #+#             */
-/*   Updated: 2026/01/15 10:23:01 by alubrano         ###   ########.fr       */
+/*   Updated: 2026/01/15 11:39:29 by alubrano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ void	ft_exec(t_pipex *pipex, char *argv);
 
 /*----------------here_doc--------------*/
 
-void	ft_here_doc(char *argv, int argc, t_pipex *pipex);
+void	ft_here_doc(char **argv, int argc, t_pipex *pipex);
+void	ft_get_line(char *argv, int fds[0]);
 
 #endif

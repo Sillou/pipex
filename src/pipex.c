@@ -6,7 +6,7 @@
 /*   By: alubrano <alubrano@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/08 21:33:53 by alubrano          #+#    #+#             */
-/*   Updated: 2026/01/15 11:01:21 by alubrano         ###   ########.fr       */
+/*   Updated: 2026/01/15 12:01:20 by alubrano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,10 +95,9 @@ t_pipex	*ft_ini_pipex(int argc, char **argv, char **envp)
 		ft_error("Pipex pids error", pipex);
 	pipex->envp = envp;
 	pipex->i = 2;
-	pipex->file_in = -1;
 	pipex->file_out = -1;
 	pipex->prev_in = -1;
-	pipex->file_in = ft_open(argv[1], 2, pipex);
+	pipex->file_in = ft_open(argv[1], 1, pipex);
 	pipex->file_out = ft_open(argv[argc - 1], 0, pipex);
 	pipex->prev_in = pipex->file_in;
 	ft_get_path(pipex);
@@ -117,12 +116,8 @@ int	main(int argc, char **argv, char **envp)
 	{
 		pipex = ft_ini_pipex(argc, argv, envp);
 		if (ft_strncmp(argv[1], "here_doc", 8) == 0)
-		{
-			pipex->i = 3,
-			pipex->file_out = ft_open(argv[argc - 1], 2, pipex);
-			ft_here_doc(argv[2], argc, pipex);
-		}
-		while (pipex->i < argc - pipex->i)
+			ft_here_doc(argv, argc, pipex);
+		while (pipex->i < argc - 2)
 			pipex->pids[k++] = ft_cmd(pipex, argv[pipex->i++]);
 		pipex->pids[k] = ft_cmd_last(pipex, argv[argc - 2]);
 		close(pipex->file_in);

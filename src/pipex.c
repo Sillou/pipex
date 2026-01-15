@@ -6,7 +6,7 @@
 /*   By: alubrano <alubrano@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/08 21:33:53 by alubrano          #+#    #+#             */
-/*   Updated: 2026/01/15 12:01:20 by alubrano         ###   ########.fr       */
+/*   Updated: 2026/01/15 16:44:09 by alubrano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,26 +63,14 @@ pid_t	ft_cmd_last(t_pipex *pipex, char *argv)
 	return (pid);
 }
 
-int	ft_open(char *argv, int z, t_pipex	*pipex)
+void	ft_no_here(t_pipex *pipex, int argc, char **argv)
 {
-	int	rest;
-
-	rest = -1;
-	if (z == 0)
-		rest = open(argv, O_WRONLY | O_CREAT | O_TRUNC, 0777);
-	else if (z == 1)
-		rest = open(argv, O_RDONLY);
-	else if (z == 2)
-		rest = open(argv, O_WRONLY | O_CREAT | O_APPEND, 0777);
-	if (rest == -1)
-	{
-		perror(argv);
-		ft_error("Open failed", pipex);
-	}
-	return (rest);
+	pipex->file_in = ft_open(argv[1], 1, pipex);
+	pipex->prev_in = pipex->file_in;
+	pipex->file_out = ft_open(argv[argc - 1], 0, pipex);
 }
 
-t_pipex	*ft_ini_pipex(int argc, char **argv, char **envp)
+t_pipex	*ft_ini_pipex(int argc, char **envp)
 {
 	t_pipex	*pipex;
 
@@ -96,10 +84,7 @@ t_pipex	*ft_ini_pipex(int argc, char **argv, char **envp)
 	pipex->envp = envp;
 	pipex->i = 2;
 	pipex->file_out = -1;
-	pipex->prev_in = -1;
-	pipex->file_in = ft_open(argv[1], 1, pipex);
-	pipex->file_out = ft_open(argv[argc - 1], 0, pipex);
-	pipex->prev_in = pipex->file_in;
+	pipex->file_in = -1;
 	ft_get_path(pipex);
 	if (!pipex->paths)
 		ft_error("Pipex paths erro", pipex);
@@ -113,10 +98,12 @@ int	main(int argc, char **argv, char **envp)
 
 	k = 0;
 	if (argc >= 5)
-	{
-		pipex = ft_ini_pipex(argc, argv, envp);
+	{	
+		pipex = ft_ini_pipex(argc, envp);
 		if (ft_strncmp(argv[1], "here_doc", 8) == 0)
 			ft_here_doc(argv, argc, pipex);
+		else 
+			ft_no_here(pipex, argc, argv);
 		while (pipex->i < argc - 2)
 			pipex->pids[k++] = ft_cmd(pipex, argv[pipex->i++]);
 		pipex->pids[k] = ft_cmd_last(pipex, argv[argc - 2]);
@@ -127,6 +114,6 @@ int	main(int argc, char **argv, char **envp)
 		return (0);
 	}
 	else
-		ft_printf("ERROR EX : ./pipex file1 cmd1 cmd2 file2");
+		ft_printf("ERROR EX : ./pipex file1 cmd1 cmd2 file2\n");
 	return (1);
 }

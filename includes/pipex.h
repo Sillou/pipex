@@ -6,7 +6,7 @@
 /*   By: alubrano <alubrano@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/08 12:34:33 by alubrano          #+#    #+#             */
-/*   Updated: 2026/01/15 11:39:29 by alubrano         ###   ########.fr       */
+/*   Updated: 2026/01/15 16:45:02 by alubrano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ typedef struct s_pipex
 /*----------------pipex--------------*/
 
 int		main(int agc, char **argv, char **envp);
-t_pipex	*ft_ini_pipex(int argc, char **argv, char **envp);
-int		ft_open(char *argv, int z, t_pipex	*pipex);
+t_pipex	*ft_ini_pipex(int argc, char **envp);
+void	ft_no_here(t_pipex *pipex, int argc, char **argv);
 pid_t	ft_cmd_last(t_pipex *pipex, char *argv);
 pid_t	ft_cmd(t_pipex *pipex, char *argv);
 
@@ -50,7 +50,8 @@ void	ft_exec(t_pipex *pipex, char *argv);
 
 /*----------------here_doc--------------*/
 
+int		ft_open(char *argv, int z, t_pipex	*pipex);
 void	ft_here_doc(char **argv, int argc, t_pipex *pipex);
-void	ft_get_line(char *argv, int fds[0]);
+void	ft_get_line(char *argv, int fds[]);
 
 #endif

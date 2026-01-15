@@ -2,7 +2,7 @@ This poject has been created as part of the 42 curriculum by alubrano.
 
 I- DESCRIPTION
     This project has bee written in C.
-    This project must be executed as follows: 
+    This project must be executed as follows:
         ./pipex file1 cmd1 cmd2 file2
     Must take 4 arguments for the Mandatory part so :
         file1 file2 are file names.
@@ -19,6 +19,7 @@ II- INSTRUCTION
 III- RESOURCES
     For this project I use many documents, like :
         GNU
+		GuideBook
         StackOverflow
         Tutorial
         Youtube

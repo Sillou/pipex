@@ -6,7 +6,7 @@
 /*   By: alubrano <alubrano@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/08 21:33:53 by alubrano          #+#    #+#             */
-/*   Updated: 2026/01/14 22:53:27 by alubrano         ###   ########.fr       */
+/*   Updated: 2026/01/15 11:01:21 by alubrano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ t_pipex	*ft_ini_pipex(int argc, char **argv, char **envp)
 	pipex->file_in = -1;
 	pipex->file_out = -1;
 	pipex->prev_in = -1;
-	pipex->file_in = ft_open(argv[1], 1, pipex);
+	pipex->file_in = ft_open(argv[1], 2, pipex);
 	pipex->file_out = ft_open(argv[argc - 1], 0, pipex);
 	pipex->prev_in = pipex->file_in;
 	ft_get_path(pipex);
@@ -119,8 +119,8 @@ int	main(int argc, char **argv, char **envp)
 		if (ft_strncmp(argv[1], "here_doc", 8) == 0)
 		{
 			pipex->i = 3,
-			pipex->file_out = ft_open(argv[argc - 1], 2);
-			ft_here_doc(argv[2]
+			pipex->file_out = ft_open(argv[argc - 1], 2, pipex);
+			ft_here_doc(argv[2], argc, pipex);
 		}
 		while (pipex->i < argc - pipex->i)
 			pipex->pids[k++] = ft_cmd(pipex, argv[pipex->i++]);
@@ -132,6 +132,6 @@ int	main(int argc, char **argv, char **envp)
 		return (0);
 	}
 	else
-		ft_printf("ERRO EX : ./pipex file1 cmd1 cmd2 file2");
+		ft_printf("ERROR EX : ./pipex file1 cmd1 cmd2 file2");
 	return (1);
 }

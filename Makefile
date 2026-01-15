@@ -6,7 +6,7 @@
 #    By: alubrano <alubrano@student.42lausanne.c    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/08 12:34:20 by alubrano          #+#    #+#              #
-#    Updated: 2026/01/14 18:54:44 by alubrano         ###   ########.fr        #
+#    Updated: 2026/01/15 10:23:34 by alubrano         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,8 @@ OBJ_DIR	= obj
 INC_DIR	= includes
 
 SRC		=	pipex.c \
-			utils.c
+			utils.c \
+			here_doc_bonus.c
 
 SRCS	= $(addprefix $(SRC_DIR)/, $(SRC))
 OBJS	= $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))

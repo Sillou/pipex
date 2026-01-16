@@ -6,7 +6,7 @@
 /*   By: alubrano <alubrano@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/15 09:36:48 by alubrano          #+#    #+#             */
-/*   Updated: 2026/01/15 16:40:28 by alubrano         ###   ########.fr       */
+/*   Updated: 2026/01/16 09:53:41 by alubrano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ void	ft_here_doc(char **argv, int argc, t_pipex *pipex)
 {
 	pid_t	pid;
 	int		fds[2];
-	
-	if (argc > 6)
+
+	if (argc < 6 )
 		ft_error("ERROR EX: here_doc LIMITER cmd cmd1 file", pipex);
 	pipex->file_out = ft_open(argv[argc - 1], 2, pipex);
 	pipex->i = 3;

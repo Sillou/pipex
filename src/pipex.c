@@ -6,7 +6,7 @@
 /*   By: alubrano <alubrano@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/08 21:33:53 by alubrano          #+#    #+#             */
-/*   Updated: 2026/01/16 12:19:17 by alubrano         ###   ########.fr       */
+/*   Updated: 2026/01/16 13:22:10 by alubrano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,6 @@ t_pipex	*ft_ini_pipex(int argc, char **envp)
 		ft_error("Pipex pids error", pipex);
 	pipex->envp = envp;
 	pipex->i = 2;
-	pipex->file_out = -1;
-	pipex->file_in = -1;
 	ft_get_path(pipex);
 	if (!pipex->paths)
 		ft_error("Pipex paths erro", pipex);

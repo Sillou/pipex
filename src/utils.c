@@ -6,7 +6,7 @@
 /*   By: alubrano <alubrano@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/09 17:37:28 by alubrano          #+#    #+#             */
-/*   Updated: 2026/01/16 12:01:33 by alubrano         ###   ########.fr       */
+/*   Updated: 2026/01/16 18:25:42 by alubrano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void	ft_exec(t_pipex *pipex, char *argv)
 	}
 	ft_putendl_fd("CMD not found", 2);
 	ft_free_cmd(t_cmd);
+	ft_clean_pipex(pipex);
 	exit(1);
 }
 

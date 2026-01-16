@@ -6,7 +6,7 @@
 /*   By: alubrano <alubrano@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/09 17:37:28 by alubrano          #+#    #+#             */
-/*   Updated: 2026/01/15 09:35:41 by alubrano         ###   ########.fr       */
+/*   Updated: 2026/01/16 12:01:33 by alubrano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,10 @@ void	ft_exec(t_pipex *pipex, char *argv)
 		temp = ft_strjoin(pipex->paths[i], "/");
 		cmd_path = ft_strjoin(temp, t_cmd[0]);
 		free(temp);
+		if (access(argv, X_OK) == 0)
+			execve(argv, t_cmd, pipex->envp);
 		if (access(cmd_path, X_OK) == 0)
-		{
 			execve(cmd_path, t_cmd, pipex->envp);
-		}
 		free(cmd_path);
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: alubrano <alubrano@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/08 21:33:53 by alubrano          #+#    #+#             */
-/*   Updated: 2026/01/15 16:44:09 by alubrano         ###   ########.fr       */
+/*   Updated: 2026/01/16 12:19:17 by alubrano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,11 +98,11 @@ int	main(int argc, char **argv, char **envp)
 
 	k = 0;
 	if (argc >= 5)
-	{	
+	{
 		pipex = ft_ini_pipex(argc, envp);
-		if (ft_strncmp(argv[1], "here_doc", 8) == 0)
+		if (ft_strncmp(argv[1], "here_doc", 9) == 0)
 			ft_here_doc(argv, argc, pipex);
-		else 
+		else
 			ft_no_here(pipex, argc, argv);
 		while (pipex->i < argc - 2)
 			pipex->pids[k++] = ft_cmd(pipex, argv[pipex->i++]);

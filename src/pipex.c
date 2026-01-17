@@ -6,7 +6,7 @@
 /*   By: alubrano <alubrano@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/08 21:33:53 by alubrano          #+#    #+#             */
-/*   Updated: 2026/01/16 13:22:10 by alubrano         ###   ########.fr       */
+/*   Updated: 2026/01/17 09:09:11 by alubrano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ int	main(int argc, char **argv, char **envp)
 		ft_clean_pipex(pipex);
 		return (0);
 	}
-	else
-		ft_printf("ERROR EX : ./pipex file1 cmd1 cmd2 file2\n");
+	ft_printf("ERROR EX : ./pipex file1 cmd1 cmd2 file2\n");
+	ft_printf("ERROR EX : here_doc LIMITER cmd cmd1 file\n");
 	return (1);
 }

@@ -2,6 +2,7 @@
 *.a
 *.out
 *.exe
+*.txt
 
 a.out
 pipex

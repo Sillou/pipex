@@ -6,7 +6,7 @@
 /*   By: alubrano <alubrano@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/15 09:36:48 by alubrano          #+#    #+#             */
-/*   Updated: 2026/01/16 18:13:49 by alubrano         ###   ########.fr       */
+/*   Updated: 2026/01/17 09:10:53 by alubrano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,9 @@ void	ft_get_line(char *argv, int fds[], t_pipex *pipex)
 	char	*line;
 
 	close(fds[0]);
-	while ((line = get_next_line(0)) && line != NULL)
+	while (1)
 	{
+		line = get_next_line(0);
 		if (ft_strncmp(line, argv, ft_strlen(argv)) == 0
 			&& line[ft_strlen(argv)] == '\n')
 		{
@@ -68,7 +69,6 @@ void	ft_here_doc(char **argv, int argc, t_pipex *pipex)
 		perror("Fork");
 	if (pid == 0)
 		ft_get_line(argv[2], fds, pipex);
-
 	else
 	{
 		close(fds[1]);
